@@ -1,2 +1,2 @@
 # exercises
-exercises of various books, courses, tutorials ..
+exercises from various books, courses, tutorials ..
