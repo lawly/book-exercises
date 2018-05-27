@@ -39,7 +39,6 @@ class CustomDate {
     // converts date to string YYYY-MM-dd hh:mm
     // note learnyounode does not support .padStart() (ECMA-262)
     toString() {
-        console.log(this.date.getMonth().toString());
         let yyyymmdd = [
             this.date.getFullYear(),
             this.date.getMonth().toString().padStart(2, "0"),
