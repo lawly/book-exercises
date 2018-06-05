@@ -1,6 +1,6 @@
 ; filename: mul-div.nasm
 ; author: lawly
-; description: demonstation of mul, imul, div
+; description: demonstation of mul, imul, div, idiv
 ;
 
 global _start
@@ -49,6 +49,17 @@ _start:
     mov cx, 0x2
     div cx                          ; remainder 1, DX = 0x1
 
+    ; signed multiplication using r/m8
+    mov eax, 0xff
+    mov ebx, 0x2
+    imul bl                         ; AX = AL * BL = -1 * 0x2 = 0xfffe
+
+    ; signed division using r/m16
+    mov edx, 0xfe0c
+    mov eax, 0xfed4
+    mov bx, 0x1122
+    idiv bx                         ; DX:AX / BX = 0xfe0cfed4 / 0x1122
+                                    ; -32702764 / 4386 => AX = 0xe2e0 (-7456), remainder: 0xfd14 (-748)
     ; exit
     mov eax, 0x81
     mov ebx, 2 
