@@ -25,7 +25,7 @@ _start:
     ; copy string from source to destination
     mov ecx, sourceLen              ; load message length into ECX
     lea esi, [source]               ; load effective address of source into ESI
-    lea edi, [destination]          ; load effective address of source into EDI
+    lea edi, [destination]          ; load effective address of destination into EDI
 
     cld                             ; clear direction flag
     rep movsb                       ; repeat while ECX != 0, copies 1 byte from source to dest
@@ -38,9 +38,9 @@ _start:
     lea esi, [source]
     lea edi, [comparison]           
     repe cmpsb                      ; repeat while equal, terminates when: ECX = 0 / ZF = 0
-                                    ; "Hello Word" = "Hello"?
+                                    ; "Hello Word\n" != "Hello\n"
 
-    jz isEqual                     ; jump if strings were equal
+    jz isEqual                     ; jump if ZF = 1
     mov ecx, strUnequal
     mov edx, strUnequalLen
     call PrintString               
@@ -51,8 +51,7 @@ isEqual:
     mov edx, strEqualLen
     call PrintString
 
-exit:
-    ; exit
+ exit:
     mov eax, 0x1
     mov ebx, 0x2
     int 0x80
@@ -61,7 +60,7 @@ section .data
     source:         db      "Hello World", 0xa
     sourceLen:      equ     $-source
 
-    comparison:     db      "Hello"
+    comparison:     db      "Hello", 0xa
 
     strEqual:       db      "Strings are equal", 0xa
     strEqualLen:    equ     $-strEqual
